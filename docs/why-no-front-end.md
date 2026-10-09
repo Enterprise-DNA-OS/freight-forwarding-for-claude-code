@@ -1,24 +1,23 @@
 # Why there is no front end
 
-CargoWise is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+A forwarding system is a list of jobs, the containers and milestones on each, the costs and revenue on each, and a calendar of cutoffs, arrivals, reports and free time. What a forwarding subscription charges for is the screens over those lists, and now, per shipment, for every job that passes through them.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+Those screens were needed because the database was hard to talk to. It is not any more. Open this folder in Claude Code and ask "which containers start costing detention this week?" or "which delivered jobs have we not invoiced?" and it runs the query and answers. Ask a question nobody built a report for and you still get an answer.
 
 ## What you gain
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
+- **Answers to your own questions.** The ten in the README are the start. Ask for the next one in plain words.
+- **No fee per shipment.** The bill does not grow with your volume or your headcount.
+- **Your jobs in a database you own.** Plain tables. Back them up, report from them, leave any time.
+- **Rules you can read.** Every check is written down in `docs/compliance.md` with its source, and in one SQL view you can change.
 
 ## What you give up
 
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
+- **Lodgement links.** This does not lodge cargo reports or import declarations with the border agencies. Keep your broker or lodgement service, and record the result here.
+- **EDI with carriers.** Bookings, status messages and invoices from carriers arrive by email or portal, and a person or a script records them.
+- **A form for every field and a phone app.** Operators ask for what they want. It runs where Claude Code runs.
+- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version.
 
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep CargoWise. If you need the answers more than the screens, this is cheaper, faster and yours.
+Enterprise DNA builds a web front end, carrier and tracking feeds, and a customer portal onto the same database for forwarders that want them. The records underneath stay yours.
 
 Installed and run for you: https://enterprisedna.co/omni/instead-of/cargowise

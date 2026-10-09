@@ -1,0 +1,12 @@
+[
+  ["Which delivered jobs have we not invoiced, and how much is sitting there?", "unbilled"],
+  ["Which costs did we pay that we never charged the customer?", "margin-leaks"],
+  ["Which customers make us the least profit per job?", "customer-profit"],
+  ["Which carriers' arrivals slip furthest from the first ETA they gave?", "carrier-reliability"],
+  ["Which import containers start costing detention this week?", "free-time"],
+  ["Which house cargo reports are due before the 48-hour cutoff?", "compliance"],
+  ["Which sailings this BMSB season still have no treatment certificate?", "bmsb"],
+  ["Which export containers have no VGM with the cargo cutoff three days out?", "cutoffs"],
+  ["Which jobs closed under our margin floor?", "job-profit"],
+  ["Which milestones are late, and on whose jobs?", "exceptions"]
+]

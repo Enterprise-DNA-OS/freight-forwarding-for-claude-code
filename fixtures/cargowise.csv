@@ -1,0 +1,4 @@
+Shipment ID,House Bill,Master Bill,Local Client,Direction,Transport Mode,Container Mode,Origin,Destination,ETD,ETA,ATD,ATA,Vessel,Voyage,Goods Description,Packages,Weight,Volume,INCO Terms,Shipment Status
+S00048211,SCF48211,HLCUHAM2610227,Murray Agri Parts,IMP,SEA,FCL,DEHAM,AUMEL,02-Nov-26,08-Dec-26,,,Kuala Lumpur Express,2611E,"Disc harrow blades, boxed",36,"14,200",48,FOB,Booked
+S00048230,SCF48230,081-55130012,Harbour Bikes Pty Ltd,IMP,AIR,,USLAX,AUSYD,14/11/2026,16/11/2026,,,QF12,,E-bike frames,12,410,3.2,FCA,Booked
+S00048244,SCF48244,,Barossa Cellar Exports,EXP,SEA,LCL,AUADL,SGSIN,2026-11-20,2026-12-04,,,,,"Wine, 120 cases",120,1900,4.1,CIF,Booked

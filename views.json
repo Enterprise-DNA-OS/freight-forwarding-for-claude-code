@@ -1,13 +1,59 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Freight Forwarding for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Forwarding week",
+    "subtitle": "Fictional demo data until you import your own shipments",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Breached or due now",
+        "note": "Rule findings with the rule cited. docs/compliance.md has the source for each.",
+        "sql": "select rule,reference,finding from compliance_findings where severity=1 order by rule,reference"
+      },
+      {
+        "title": "Arrivals in the next seven days",
+        "sql": "select reference,customer,mode,voyage,destination_port as port,eta,ata,cargo_reported_at is not null as cargo_reported,entry_number,containers from arrival_queue where days_to_arrival<=7 order by coalesce(ata,eta)"
+      },
+      {
+        "title": "Export cutoffs",
+        "sql": "select reference,customer,voyage,to_char(doc_cutoff_at,'YYYY-MM-DD HH24:MI') as doc_cutoff,to_char(cargo_cutoff_at,'YYYY-MM-DD HH24:MI') as cargo_cutoff,containers_without_vgm,dg_declaration_missing from cutoff_queue order by coalesce(doc_cutoff_at,cargo_cutoff_at)"
+      },
+      {
+        "title": "Containers against free time",
+        "sql": "select shipment,number,size,customer,free_until,days_left from container_free_time order by days_left"
+      },
+      {
+        "title": "Late milestones",
+        "sql": "select shipment,customer,operator,milestone,planned_on,days_late from milestone_exceptions order by days_late desc"
+      }
+    ]
+  },
+  {
+    "name": "money",
+    "title": "Job profit",
+    "subtitle": "What is unbilled, what leaked and what each job made",
+    "sections": [
+      {
+        "title": "Delivered and not invoiced",
+        "sql": "select reference,customer,operator,delivered_on,current_date-delivered_on as days,unbilled,profit from job_profit where delivered_on is not null and closed_on is null and (unbilled>0 or revenue=0) order by delivered_on"
+      },
+      {
+        "title": "Costs never charged on",
+        "sql": "select shipment,customer,code,description,supplier,cost from unrecovered_costs order by cost desc"
+      },
+      {
+        "title": "Every open and recent job",
+        "sql": "select reference,status,customer,revenue,cost,profit,margin_pct,unbilled,accrued from job_profit where closed_on is null or closed_on>=current_date-30 order by margin_pct nulls first"
+      }
+    ]
+  },
+  {
+    "name": "board",
+    "title": "Shipment board",
+    "subtitle": "Every open job by arrival or departure",
+    "sections": [
+      {
+        "title": "Open jobs",
+        "sql": "select reference,status,direction,mode,customer,route,carrier,etd,eta,days_to_eta,teu,operator from shipment_board order by coalesce(eta,etd)"
       }
     ]
   }

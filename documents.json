@@ -1,11 +1,60 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "arrival-notice",
+    "title": "Arrival notice",
+    "for_each": "select id,reference from shipments where direction='import' and delivered_on is null and status not in ('draft','closed','cancelled')",
+    "file": "reference",
+    "sections": [
+      {
+        "title": "Shipment",
+        "note": "Check the vessel and ETA with the carrier before you send this.",
+        "sql": "select s.reference,s.house_bill,c.name as consignee,k.name as carrier,s.voyage,s.origin_port as from_port,s.destination_port as to_port,coalesce(s.ata,s.eta) as arrival,s.goods,s.packages,s.weight_kg,s.volume_m3 from shipments s join parties c on c.id=s.customer_id left join parties k on k.id=s.carrier_id where s.id=$1"
+      },
+      {
+        "title": "Containers and free time",
+        "note": "Free time runs from the vessel's arrival. Detention applies from the day after it ends until the empty is back.",
+        "sql": "select t.number,t.size,t.seal,coalesce(t.free_days,(select default_free_days from organisation)) as free_days from containers t where t.shipment_id=$1 order by t.number"
+      },
+      {
+        "title": "Charges to collect",
+        "sql": "select code,description,amount,currency from charges where shipment_id=$1 and side='revenue' order by code"
+      }
+    ]
+  },
+  {
+    "name": "job-sheet",
+    "title": "Job sheet",
+    "for_each": "select id,reference from shipments where status not in ('draft','cancelled')",
+    "file": "reference",
+    "sections": [
+      {
+        "title": "Job",
+        "sql": "select reference,status,direction,mode,customer,operator,revenue,cost,profit,margin_pct,unbilled,accrued from job_profit where id=$1"
+      },
+      {
+        "title": "Charges",
+        "sql": "select x.side,x.code,x.description,p.name as party,x.amount,x.currency,x.fx_rate,x.status,x.invoice_ref from charges x join parties p on p.id=x.party_id where x.shipment_id=$1 order by x.side desc,x.code"
+      },
+      {
+        "title": "Milestones",
+        "sql": "select code,planned_on,actual_on,note from milestones where shipment_id=$1 order by coalesce(actual_on,planned_on)"
+      }
+    ]
+  },
+  {
+    "name": "customer-statement",
+    "title": "Open shipments",
+    "for_each": "select distinct c.id,c.name from parties c join shipments s on s.customer_id=c.id where s.status not in ('draft','closed','cancelled')",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Where your shipments are",
+        "sql": "select s.reference,s.house_bill,s.origin_port || ' > ' || s.destination_port as route,s.voyage,s.etd,s.eta,s.ata,s.status from shipments s where s.customer_id=$1 and s.status not in ('draft','closed','cancelled') order by coalesce(s.eta,s.etd)"
+      },
+      {
+        "title": "Invoiced and to come",
+        "sql": "select s.reference,x.code,x.description,x.amount,x.currency,case when x.status='invoiced' then x.invoice_ref else 'to be invoiced' end as invoice from charges x join shipments s on s.id=x.shipment_id where s.customer_id=$1 and x.side='revenue' and s.status not in ('draft','closed','cancelled') order by s.reference,x.code"
+      }
     ]
   }
 ]

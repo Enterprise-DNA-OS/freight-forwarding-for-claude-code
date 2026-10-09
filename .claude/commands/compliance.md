@@ -1,11 +1,9 @@
 ---
-description: Check the records against the rules this industry lives under (the ones listed in docs/compliance.md) and report what is missing, late, or about to breach, with the rule cited.
+description: Check every job against the rules in docs/compliance.md and report what is breached, due or missing
 ---
 
-1. Read `docs/compliance.md`. Each rule has a name, the source it comes from, what a breach looks like in the data, and the SQL or command that finds it.
-2. Run each check. Use the CLI's `--json` output or a direct query through `scripts/lib/db.mjs`.
-3. Report as a table: rule, count, the worst example (name and days), the source. Order by severity: breached first, then due within 7 days, then clean.
-4. For anything breached, draft the fix the operator can approve: the record to update, the notice to send (draft to `drafts/`, never send), or the task to add.
-5. If a rule in `docs/compliance.md` is out of date, say so and stop. Do not guess at law. The operator confirms the rule, then you update the doc and the check together.
+Check every job against the rules in docs/compliance.md and report what is breached, due or missing. Severity 1 is breached or needs action now. Cite the rule for each finding. If a rule looks out of date (a new BMSB season list, a changed threshold), say so and stop: do not guess at law.
 
-Nothing here is legal advice. The doc records the rules the operator has told the system to enforce, with sources, and this command checks the data against them.
+Run: `node scripts/forwarding.mjs compliance`. Add `--json` for structured results.
+
+The CLI output is the source. If a name matches more than one record, show the candidates and ask; an error is never permission to use a different record. Nothing here sends, lodges, pays or deletes.
